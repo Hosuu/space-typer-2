@@ -1,3 +1,4 @@
+﻿import Settings from '../Settings.js';
 import GameManager from './GameManager.js';
 export default class PromptManager {
     constructor() {
@@ -17,14 +18,14 @@ export default class PromptManager {
         return this._instance;
     }
     keyboardEventHandler(event) {
-        // event.preventDefault() //TODO UNCOMMENT
         const char = event.key;
         const code = event.code;
         const timeStamp = event.timeStamp;
         const isRepeating = event.repeat;
         const isAltPressed = event.altKey;
         const isCtrlPressed = event.ctrlKey;
-        //Backspace
+        if (isRepeating && Settings.promptPreventKeyRepeating)
+            return;
         if (code === 'Backspace') {
             if (this.promptValue.length == 0)
                 return;
@@ -37,7 +38,6 @@ export default class PromptManager {
                 this.backspace();
             return;
         }
-        //Submit
         if (code === 'Enter' || code === 'Space') {
             const startTimeStamp = this.promptValue[0].timeStamp;
             const text = this.getText();
@@ -50,7 +50,6 @@ export default class PromptManager {
             this.reset();
             return;
         }
-        //Char
         if (event.key.length === 1) {
             this.registerChar(char, timeStamp);
             return;
@@ -83,3 +82,4 @@ export default class PromptManager {
         }
     }
 }
+//# sourceMappingURL=PromptManager.js.map

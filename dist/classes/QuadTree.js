@@ -1,4 +1,4 @@
-import Rect from './shapes/Rect.js';
+﻿import Rect from './shapes/Rect.js';
 import Vector2 from './Vector2.js';
 var QTnode;
 (function (QTnode) {
@@ -20,7 +20,6 @@ export default class QuadTree {
         const { width, height } = this.bounds;
         const halfWidth = width / 2;
         const halfHeight = height / 2;
-        //#region Create nodes
         const neBounds = new Rect(this.bounds.position.clone().add(new Vector2(halfWidth, 0)), halfWidth, halfHeight);
         const nwBounds = new Rect(this.bounds.position.clone().add(new Vector2(0, 0)), halfWidth, halfHeight);
         const swBounds = new Rect(this.bounds.position.clone().add(new Vector2(0, halfHeight)), halfWidth, halfHeight);
@@ -30,14 +29,11 @@ export default class QuadTree {
         this.nodes[QTnode.NorthWest] = new QuadTree(nwBounds, this.max_objects, this.max_levels, this.level + 1);
         this.nodes[QTnode.SouthWest] = new QuadTree(swBounds, this.max_objects, this.max_levels, this.level + 1);
         this.nodes[QTnode.SouthEast] = new QuadTree(seBounds, this.max_objects, this.max_levels, this.level + 1);
-        //#endregion
-        //Transfer existing objects
         this.objects.forEach((obj) => {
             this.getNodes(obj._bounds).forEach((node) => {
                 node.insert(obj);
             });
         });
-        //Clear parent objects
         this.objects = [];
     }
     getNodes(bounds) {
@@ -45,7 +41,6 @@ export default class QuadTree {
             return [];
         const nodes = new Array();
         const { x: centerX, y: centerY } = this.bounds.getCenterPoint();
-        //Rect part flags
         const north = bounds.getTopY() < centerY;
         const south = bounds.getBottomY() > centerY;
         const west = bounds.getLeftX() < centerX;
@@ -60,9 +55,7 @@ export default class QuadTree {
             nodes.push(this.nodes[QTnode.SouthEast]);
         return nodes;
     }
-    /** Inserts values into {@link Quadtree} */
     insert(obj) {
-        //If already spliited call only child nodes
         if (this.nodes) {
             this.getNodes(obj._bounds).forEach((node) => {
                 node.insert(obj);
@@ -75,10 +68,8 @@ export default class QuadTree {
     }
     query(queryBounds) {
         const queryRessultObjects = new Set();
-        //All root objects
         for (const obj of this.objects)
             queryRessultObjects.add(obj);
-        //if splitted, querry childNodes
         if (this.nodes)
             for (const node of this.getNodes(queryBounds))
                 for (const nestedQueryRessultObject of node.query(queryBounds))
@@ -86,3 +77,4 @@ export default class QuadTree {
         return Array.from(queryRessultObjects);
     }
 }
+//# sourceMappingURL=QuadTree.js.map

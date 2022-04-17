@@ -1,3 +1,4 @@
+﻿import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import Word from '../words/Word.js';
 import RenderManager from './RenderManager.js';
@@ -50,10 +51,11 @@ export default class GameManager {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         ctx.save();
         ctx.fillStyle = '#0f0';
-        ctx.font = '16px System, monospace';
+        ctx.font = `${Settings.drawFpsFontSize}px System, monospace`;
         ctx.textBaseline = 'top';
         ctx.fillText(Math.floor(SpaceTyperEngine.getInstance().getFps()).toString() + ' FPS', 5, 5);
         ctx.restore();
         this.words.forEach((w) => w.draw(ctx));
     }
 }
+//# sourceMappingURL=GameManager.js.map

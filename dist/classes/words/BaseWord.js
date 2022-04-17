@@ -1,4 +1,4 @@
-import PromptManager from '../managers/PromptManager.js';
+﻿import PromptManager from '../managers/PromptManager.js';
 import RenderManager from '../managers/RenderManager.js';
 import Settings from '../Settings.js';
 import Rect from '../shapes/Rect.js';
@@ -15,17 +15,14 @@ export default class BaseWord {
         ctx.save();
         ctx.font = `${this.size}px ${Settings.wordFont}`;
         ctx.textBaseline = 'top';
-        //Base draw
         if (promptValue !== this.text || !Settings.wordtHighlighting) {
             ctx.fillStyle = this.color;
             ctx.fillText(this.text, this.position.x, this.position.y);
         }
-        //Fully typed
         if (Settings.wordtHighlighting && promptValue === this.text) {
             ctx.fillStyle = Settings.wordHighlightningColor;
             ctx.fillText(promptValue, this.position.x, this.position.y);
         }
-        //Partially typed
         else if (Settings.wordTypingMatch && this.text.startsWith(promptValue)) {
             ctx.fillStyle = Settings.wordTypingMatchColor;
             ctx.fillText(promptValue, this.position.x, this.position.y);
@@ -35,16 +32,13 @@ export default class BaseWord {
         if (Settings.renderWordColider)
             this.collider.renderAt(ctx, Settings.wordColiderColor, 2);
         if (Settings.renderWordCenterPoint)
-            this.textBox.getCenterPoint().renderAt(ctx, Settings.wordCenterPointColor, 4); //prettier-ignore
+            this.textBox.getCenterPoint().renderAt(ctx, Settings.wordCenterPointColor, 4);
         ctx.restore();
     }
-    /**
-     * Sets new Text, TextBox and Collider based on new word size
-     */
     updateText(newText) {
         const ctx = RenderManager.getInstance().game.context;
         ctx.save();
-        ctx.font = `${this.size}px ${Settings.wordFont}`;
+        ctx.font = `${this.size}px ${Settings.wordFont}, Comfortaa, sans-serif`;
         ctx.textBaseline = 'top';
         const metrics = ctx.measureText(newText);
         const width = metrics.width;
@@ -64,3 +58,4 @@ export default class BaseWord {
         return this.dead;
     }
 }
+//# sourceMappingURL=BaseWord.js.map

@@ -1,33 +1,28 @@
-import BackgroundManager from './managers/BackgroundManager.js';
+﻿import BackgroundManager from './managers/BackgroundManager.js';
 import GameManager from './managers/GameManager.js';
 import ParticlesManager from './managers/ParticlesManager.js';
 import PromptManager from './managers/PromptManager.js';
 import RenderManager from './managers/RenderManager.js';
 import UiManager from './managers/UiManager.js';
 export default class SpaceTyperEngine {
-    //########################
     constructor() {
         if (SpaceTyperEngine._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
         SpaceTyperEngine._instance = this;
-        //Init variables
         this.isRunning = true;
         this.lastUpdateTimeStamp = performance.now();
         this.lastRequestedFrameId = 0;
         this.frameCount = 0;
         this.deltaTime = 0;
         this.timeElapsed = 0;
-        //Init modules
         this.renderManager = new RenderManager();
         this.uiManager = new UiManager();
         this.gameManager = new GameManager();
         this.particlesManager = new ParticlesManager();
         this.backgroundManager = new BackgroundManager();
         this.promptManager = new PromptManager();
-        //Pause/resume engine of focus loss/gain
         window.addEventListener('focus', this.resume.bind(this));
         window.addEventListener('blur', this.pause.bind(this));
-        //Run
         this.lastRequestedFrameId = window.requestAnimationFrame(this.mainLoop.bind(this));
         if (document.visibilityState === 'hidden')
             this.pause();
@@ -39,17 +34,14 @@ export default class SpaceTyperEngine {
         const dt = timeStamp - this.lastUpdateTimeStamp;
         this.deltaTime = dt;
         this.timeElapsed += dt;
-        //Update
         this.gameManager.update();
         this.particlesManager.update();
         this.backgroundManager.update();
         this.uiManager.update();
-        //Draw
         this.gameManager.draw();
         this.particlesManager.draw();
         this.backgroundManager.draw();
         this.uiManager.draw();
-        //loop
         this.lastUpdateTimeStamp = timeStamp;
         this.frameCount += 1;
         this.lastRequestedFrameId = window.requestAnimationFrame(this.mainLoop.bind(this));
@@ -87,3 +79,4 @@ export default class SpaceTyperEngine {
         return 1000 / this.deltaTime;
     }
 }
+//# sourceMappingURL=SpaceTyperEngine.js.map

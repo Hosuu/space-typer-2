@@ -1,4 +1,4 @@
-import Vector2 from '../Vector2.js';
+﻿import Vector2 from '../Vector2.js';
 export default class Rect {
     constructor(position, width, height) {
         this.position = position;
@@ -33,3 +33,4 @@ export default class Rect {
         ctx.restore();
     }
 }
+//# sourceMappingURL=Rect.js.map

@@ -1,20 +1,17 @@
-import Counter from '../counter.js';
+﻿import Counter from '../counter.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 export default class UiManager {
     constructor() {
         UiManager._instance = this;
-        //TopBar
         const topBarHook = document.querySelector('.top_bar');
         if (!(topBarHook instanceof HTMLDivElement))
             throw new Error('Cannot find .top_bar div element in DOM');
         this.topBarElement = topBarHook;
-        //Score
         const scoreHook = document.querySelector('[stat="score"]');
         if (!(scoreHook instanceof HTMLDivElement))
             throw new Error('Cannot find [stat="score"] div element in DOM');
         this.scoreElement = scoreHook;
         this.scoreCounter = new Counter(0);
-        //Timer
         const timerHook = document.querySelector('[stat="timer"]');
         if (!(timerHook instanceof HTMLDivElement))
             throw new Error('Cannot find [stat="timer"] div element in DOM');
@@ -40,3 +37,4 @@ export default class UiManager {
         this.updateTimer(Math.floor(SpaceTyperEngine.getTimeElapsed()));
     }
 }
+//# sourceMappingURL=UiManager.js.map

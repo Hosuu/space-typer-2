@@ -1,5 +1,6 @@
-import GameManager from '../managers/GameManager.js';
+﻿import GameManager from '../managers/GameManager.js';
 import CircleParticle from '../particles/CircleParticle.js';
+import WordParticle from '../particles/WordParticle.js';
 import Settings from '../Settings.js';
 import Vector2 from '../Vector2.js';
 import BaseWord from './BaseWord.js';
@@ -15,8 +16,7 @@ export default class Word extends BaseWord {
     update(dt) {
         this.progerss += dt * this.speed;
         if (this.progerss > 1) {
-            const centerLeft = this.textBox.getCenterPoint().add(Vector2.Left.multiply(this.textBox.width / 2)); //prettier-ignore
-            //Particles
+            const centerLeft = this.textBox.getCenterPoint().add(Vector2.Left.multiply(this.textBox.width / 2));
             for (let i = 0; i < 7; i++) {
                 const velocity = Vector2.FromAngle(Math.PI + (Math.random() - 0.5) * (Math.PI / 4)).multiply(3);
                 new CircleParticle({
@@ -38,25 +38,30 @@ export default class Word extends BaseWord {
     submit(sumbitValue) {
         if (this.text != sumbitValue)
             return false;
-        //Score
         const gameMan = GameManager.getInstance();
         gameMan.addScore(this.text.length * 10);
-        //Paricles
+        const position = this.textBox.getCenterPoint();
         for (let i = 0; i < 40; i++) {
-            const position = this.textBox.getCenterPoint();
-            const velocity = Vector2.FromAngle(Math.PI * 2 * Math.random()).multiply(0.3);
+            const velocity = Vector2.FromAngle(Math.PI * 2 * Math.random()).multiply(0.25);
             new CircleParticle({
                 position,
                 velocity,
-                velocityScaling: 1.001,
+                velocityScaling: 1.0002,
                 size: 1 + Math.random() * 2,
                 sizeDelta: 0.01,
                 sizeScaling: 1.02,
                 duration: 250,
             });
         }
-        //Make word dead
+        new WordParticle({
+            position,
+            text: this.text,
+            sizeDelta: -0.02,
+            sizeScaling: 0.999,
+            duration: 500,
+        });
         this.dead = true;
         return true;
     }
 }
+//# sourceMappingURL=Word.js.map

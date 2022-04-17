@@ -1,9 +1,8 @@
-export default class Vector2 {
+﻿export default class Vector2 {
     constructor(x, y) {
         this.x = x ?? 0;
         this.y = y ?? x ?? 0;
     }
-    //#region static constructors
     static get Zero() {
         return new Vector2(0, 0);
     }
@@ -26,8 +25,6 @@ export default class Vector2 {
     static FromAngle(angle) {
         return new Vector2(Math.cos(angle), Math.sin(angle));
     }
-    //#endregion
-    //#region math operators
     add(vec) {
         this.x += vec.x;
         this.y += vec.y;
@@ -54,7 +51,6 @@ export default class Vector2 {
         this.x += (target.x - this.x) * t;
         this.y += (target.y - this.y) * t;
     }
-    //#endregion
     set(x, y) {
         this.x = x;
         this.y = y ?? x;
@@ -87,7 +83,6 @@ export default class Vector2 {
     getDistanceTo(vec) {
         return Math.abs(this.clone().subtract(vec).getMagnitude());
     }
-    //#region Utils
     clone() {
         return new Vector2(this.x, this.y);
     }
@@ -105,8 +100,6 @@ export default class Vector2 {
         ctx.fill();
         ctx.restore();
     }
-    //#endregion
-    //#region Static functions
     static sum(...vectors) {
         const v = new Vector2(0, 0);
         for (const vec of vectors) {
@@ -129,3 +122,4 @@ export default class Vector2 {
         return new Vector2(x, y);
     }
 }
+//# sourceMappingURL=Vector2.js.map

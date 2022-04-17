@@ -1,10 +1,9 @@
-import Star from '../particles/Star.js';
+﻿import Star from '../particles/Star.js';
 import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import Vector2 from '../Vector2.js';
 import RenderManager from './RenderManager.js';
 export default class BackgroundManager {
-    //#endregion
     constructor() {
         BackgroundManager._instance = this;
         this.stars = new Array();
@@ -35,10 +34,8 @@ export default class BackgroundManager {
     }
     setStarLimit(limit) {
         this.starsLimit = limit;
-        //Too much
         if (this.stars.length > limit)
-            this.stars = this.stars.filter((star, index) => index < this.starsLimit - 1);
-        //Not enough
+            this.stars = this.stars.filter((_, index) => index < this.starsLimit - 1);
         while (this.stars.length < limit) {
             this.stars.push(new Star());
         }
@@ -74,3 +71,4 @@ export default class BackgroundManager {
         return this.mousePosition.clone();
     }
 }
+//# sourceMappingURL=BackgroundManager.js.map

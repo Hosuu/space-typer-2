@@ -1,5 +1,4 @@
-//Source: https://easings.net/
-const c1 = 1.70158;
+﻿const c1 = 1.70158;
 const c2 = c1 * 1.525;
 const c3 = c1 + 1;
 const c4 = (2 * Math.PI) / 3;
@@ -135,3 +134,4 @@ export default class Easing {
         return x < 0.5 ? (1 - this.bounceOut(1 - 2 * x)) / 2 : (1 + this.bounceOut(2 * x - 1)) / 2;
     }
 }
+//# sourceMappingURL=Easing.js.map

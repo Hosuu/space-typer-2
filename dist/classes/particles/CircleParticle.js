@@ -1,4 +1,4 @@
-import BaseParticle from './BaseParticle.js';
+﻿import BaseParticle from './BaseParticle.js';
 export default class CircleParticle extends BaseParticle {
     constructor(options) {
         super(options);
@@ -15,3 +15,4 @@ export default class CircleParticle extends BaseParticle {
         ctx.restore();
     }
 }
+//# sourceMappingURL=CircleParticle.js.map

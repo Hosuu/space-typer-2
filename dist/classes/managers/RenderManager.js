@@ -1,4 +1,4 @@
-import BackgroundManager from './BackgroundManager.js';
+﻿import BackgroundManager from './BackgroundManager.js';
 export default class RenderManager {
     constructor() {
         if (RenderManager._instance)
@@ -66,3 +66,4 @@ export default class RenderManager {
         };
     }
 }
+//# sourceMappingURL=RenderManager.js.map

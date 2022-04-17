@@ -1,4 +1,4 @@
-export default class Circle {
+﻿export default class Circle {
     constructor(position, radius) {
         this.position = position;
         this.radius = radius;
@@ -34,3 +34,4 @@ export default class Circle {
         ctx.restore();
     }
 }
+//# sourceMappingURL=Circle.js.map

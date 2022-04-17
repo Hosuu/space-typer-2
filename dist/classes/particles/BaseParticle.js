@@ -1,4 +1,4 @@
-import ParticlesManager from '../managers/ParticlesManager.js';
+﻿import ParticlesManager from '../managers/ParticlesManager.js';
 import Vector2 from '../Vector2.js';
 export default class BaseParticle {
     constructor(opt) {
@@ -24,11 +24,9 @@ export default class BaseParticle {
             this.dead = true;
             return;
         }
-        //position
         this.velocity.multiply(this.velocityScaling ** dt);
         this.velocity.add(this.velocityDelta.clone().multiply(dt));
         this.position.add(this.velocity.clone().multiply(dt));
-        //size
         this.size *= this.sizeScaling;
         this.size += this.sizeDelta;
     }
@@ -36,3 +34,4 @@ export default class BaseParticle {
         return this.dead;
     }
 }
+//# sourceMappingURL=BaseParticle.js.map

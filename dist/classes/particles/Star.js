@@ -1,4 +1,4 @@
-import BackgroundManager from '../managers/BackgroundManager.js';
+﻿import BackgroundManager from '../managers/BackgroundManager.js';
 import Settings from '../Settings.js';
 import Vector2 from '../Vector2.js';
 export default class Star {
@@ -15,23 +15,17 @@ export default class Star {
     }
     update(dt) {
         this.position.add(this.velocity.clone().multiply(dt));
-        //#region stars warping
-        //Offset to prevent sharp warping between screen edges
         const offset = 50;
-        //Viewport size
         const vWidth = window.innerWidth;
         const vHeight = window.innerHeight;
-        // X-axis
         if (this.position.x > vWidth + offset)
             this.position.x -= vWidth + offset;
         if (this.position.x < -offset)
             this.position.x += vWidth + offset;
-        // Y-axis
         if (this.position.y > vHeight + offset)
             this.position.y -= vHeight + offset;
         if (this.position.y < -offset)
             this.position.y += vHeight + offset;
-        //#endregion
     }
     draw(ctx) {
         ctx.save();
@@ -56,3 +50,4 @@ export default class Star {
         this.position = new Vector2(randX, randY);
     }
 }
+//# sourceMappingURL=Star.js.map

@@ -1,4 +1,4 @@
-import Settings from '../Settings.js';
+﻿import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import RenderManager from './RenderManager.js';
 export default class ParticlesManager {
@@ -7,7 +7,6 @@ export default class ParticlesManager {
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
         ParticlesManager._instance = this;
         this.canvas = RenderManager.getInstance().particle.canvas;
-        this.ctx = RenderManager.getInstance().particle.context;
         this.enabled = Settings.particlesEnabled;
         this.setBlur(Settings.particlesBlur);
         this.setOpacity(Settings.particlesOpacity);
@@ -29,7 +28,7 @@ export default class ParticlesManager {
     setParticlesLimit(value) {
         this.particlesLimit = value;
         if (this.particles.length > this.particlesLimit)
-            this.particles = this.particles.filter((particle, index) => index < this.particlesLimit - 1);
+            this.particles = this.particles.filter((_, index) => index < this.particlesLimit - 1);
     }
     registerParticle(p) {
         if (this.particles.length + 1 >= this.particlesLimit)
@@ -66,3 +65,4 @@ export default class ParticlesManager {
         ctx.restore();
     }
 }
+//# sourceMappingURL=ParticlesManager.js.map

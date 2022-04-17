@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SpaceTyper</title>
+		<link rel="stylesheet" href="css/main.css" />
+		<script src="../dist/index.js" type="module"></script>
+	</head>
+	<body>
+		<div class="app">
+			<!-- Render -->
+			<canvas
+				id="background_renderer"
+				class="animateCanv"
+				style="--blur: 0px; --gray: 0"
+			></canvas>
+			<canvas
+				id="particles_renderer"
+				class="animateCanv"
+				style="--blur: 0px; --gray: 0"
+			></canvas>
+			<canvas id="game_renderer" class="animateCanv" style="--blur: 0px; --gray: 0"></canvas>
+
+			<!-- User interface -->
+			<div class="game_ui">
+				<div class="top_bar" visible="true">
+					<div class="text_box">
+						<div class="label">Score</div>
+						<div class="value" stat="score">0</div>
+					</div>
+					<div class="text_box">
+						<div class="label">Time</div>
+						<div class="value" stat="timer">00:00</div>
+					</div>
+					<div class="text_box">
+						<div class="label">Lives</div>
+						<div class="value" stat="lives">3</div>
+					</div>
+				</div>
+				<div class="bottom_bar">
+					<div class="prompt_box">
+						<div stat="prompt"></div>
+					</div>
+
+					<div class="bottom_nav">
+						<div class="side_nav">
+							<span class="nav_link">Space Typer TEST_BUILD</span>
+						</div>
+
+						<div class="main_nav">
+							<span class="nav_link">Scores</span>
+							<span class="nav_link">Statistics</span>
+							<span class="nav_link">Settings</span>
+							<span class="nav_link">How to play?</span>
+						</div>
+
+						<div class="side_nav">
+							<span class="nav_link">GitHub</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modals -->
+		</div>
+	</body>
+</html>

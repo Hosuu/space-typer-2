@@ -1,0 +1,28 @@
+:root {
+	/* Main */
+	--main-bg-color: #111;
+	--main-font-face: comfortaa, sans-serif;
+	--main-font-color: #ccc;
+
+	/* Prompt */
+	--prompt-font-size: 1.5rem;
+	--prompt-font-weight: 700;
+	--prompt-active-text-color: #eee;
+	--prompt-active-text-glow: #999;
+	--prompt-inactive-text-color: #aaa8;
+	--prompt-transition-duration: 0.15s;
+
+	/* Text box */
+	--TB-bg-blur: 3px;
+	--TB-bg-color: #ffffff09;
+
+	--TB-label-size: 1rem;
+	--TB-label-spacing: 3px;
+	--TB-label-weight: 600;
+	--TB-label-color: #aaa;
+
+	--TB-value-size: 1.5rem;
+	--TB-value-spacing: 2px;
+	--TB-value-weight: 700;
+	--TB-value-color: #eee;
+}

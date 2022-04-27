@@ -1,5 +1,8 @@
 ﻿import Vector2 from '../Vector2.js';
 export default class Rect {
+    position;
+    width;
+    height;
     constructor(position, width, height) {
         this.position = position;
         this.width = width;

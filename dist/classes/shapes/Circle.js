@@ -1,4 +1,6 @@
 ﻿export default class Circle {
+    position;
+    radius;
     constructor(position, radius) {
         this.position = position;
         this.radius = radius;

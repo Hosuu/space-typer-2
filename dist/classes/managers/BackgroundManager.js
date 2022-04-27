@@ -1,43 +1,56 @@
-﻿import Star from '../particles/Star.js';
-import Settings from '../Settings.js';
-import SpaceTyperEngine from '../SpaceTyperEngine.js';
-import Vector2 from '../Vector2.js';
-import RenderManager from './RenderManager.js';
+﻿import Settings from '../Settings.js';
 export default class BackgroundManager {
+    enabled;
+    canvas;
+    worker;
+    starsCount;
+    static _instance;
+    static getInstance() {
+        return this._instance;
+    }
     constructor() {
         BackgroundManager._instance = this;
-        this.stars = new Array();
-        this.canvas = RenderManager.getInstance().background.canvas;
-        this.ctx = RenderManager.getInstance().background.context;
-        this.mousePosition = new Vector2(window.innerWidth / 2, window.innerHeight / 2);
+        const canvasHook = document.querySelector('#background_renderer');
+        this.canvas = canvasHook;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        const offscreenCanv = this.canvas.transferControlToOffscreen();
         this.enabled = Settings.backgroundEnabled;
         this.setBlur(Settings.backgroundBlur);
         this.setOpacity(Settings.backgroundOpacity);
-        this.starsLimit = Settings.backgroundStarsCount;
-        for (let i = 0; i < this.starsLimit; i++)
-            this.stars.push(new Star());
-        window.addEventListener('mousemove', (e) => {
-            this.mousePosition = new Vector2(e.x, e.y);
+        this.starsCount = Settings.backgroundStarsCount;
+        this.worker = new Worker('../dist/WebWorker.js', { type: 'module' });
+        this.worker.postMessage(['init', offscreenCanv], [offscreenCanv]);
+        this.worker.postMessage(['setStarsCount', this.starsCount]);
+        if (!this.enabled)
+            this.worker.postMessage(['pauseLoop']);
+        window.addEventListener('mousemove', ({ x, y }) => {
+            this.worker.postMessage(['updateMousePosition', { x, y }]);
         });
+        window.addEventListener('resize', this.resizeHandler.bind(this));
+        this.resizeHandler();
     }
-    static getInstance() {
-        return this._instance;
+    resizeHandler() {
+        const height = window.innerHeight;
+        const width = window.innerWidth;
+        this.worker.postMessage(['resizeCanvas', { width, height }]);
     }
     isEnabled() {
         return this.enabled;
     }
     setEnabled(value) {
-        this.enabled = value;
+        if (this.enabled != value) {
+            this.enabled = value;
+            this.worker.postMessage([value ? 'resumeLoop' : 'pauseLoop']);
+        }
     }
-    getStarLimit() {
-        return this.starsLimit;
+    getStarsCount() {
+        return this.starsCount;
     }
-    setStarLimit(limit) {
-        this.starsLimit = limit;
-        if (this.stars.length > limit)
-            this.stars = this.stars.filter((_, index) => index < this.starsLimit - 1);
-        while (this.stars.length < limit) {
-            this.stars.push(new Star());
+    setStarCount(count) {
+        if (this.starsCount != count) {
+            this.starsCount = count;
+            this.worker.postMessage(['setStarsCount', count]);
         }
     }
     getBlur() {
@@ -46,29 +59,17 @@ export default class BackgroundManager {
     setBlur(value) {
         this.canvas.style.setProperty('--blur', value + 'px');
     }
+    getGrayScale() {
+        return parseFloat(this.canvas.style.getPropertyValue('--gray'));
+    }
+    setGrayScale(value) {
+        this.canvas.style.setProperty('--gray', value.toString());
+    }
     getOpacity() {
         return parseFloat(this.canvas.style.getPropertyValue('opacity'));
     }
     setOpacity(value) {
         this.canvas.style.setProperty('opacity', value.toString());
-    }
-    update() {
-        if (!this.enabled)
-            return;
-        const dt = SpaceTyperEngine.getDeltaTime();
-        this.stars.forEach((star) => star.update(dt));
-    }
-    draw() {
-        if (!this.enabled)
-            return;
-        this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        this.stars.forEach((star) => star.draw(this.ctx));
-    }
-    randomizeStarPositions() {
-        this.stars.forEach((s) => s.randomizePosition());
-    }
-    getMousePos() {
-        return this.mousePosition.clone();
     }
 }
 //# sourceMappingURL=BackgroundManager.js.map

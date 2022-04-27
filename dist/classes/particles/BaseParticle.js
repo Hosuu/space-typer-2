@@ -1,6 +1,17 @@
 ﻿import ParticlesManager from '../managers/ParticlesManager.js';
 import Vector2 from '../Vector2.js';
 export default class BaseParticle {
+    position;
+    dead;
+    velocity;
+    velocityDelta;
+    velocityScaling;
+    color;
+    size;
+    sizeDelta;
+    sizeScaling;
+    duration;
+    lifeTime;
     constructor(opt) {
         const manager = ParticlesManager.getInstance();
         manager.registerParticle(this);

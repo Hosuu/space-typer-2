@@ -5,6 +5,13 @@ import Settings from '../Settings.js';
 import Vector2 from '../Vector2.js';
 import BaseWord from './BaseWord.js';
 export default class Word extends BaseWord {
+    text;
+    speed;
+    color;
+    size;
+    position;
+    textBox;
+    collider;
     constructor(text, duration) {
         super();
         this.speed = 1 / duration;

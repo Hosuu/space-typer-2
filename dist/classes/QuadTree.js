@@ -8,6 +8,12 @@ var QTnode;
     QTnode[QTnode["SouthEast"] = 3] = "SouthEast";
 })(QTnode || (QTnode = {}));
 export default class QuadTree {
+    bounds;
+    max_objects;
+    max_levels;
+    level;
+    objects;
+    nodes;
     constructor(bounds, max_objects, max_levels, level) {
         this.bounds = bounds;
         this.max_objects = max_objects;

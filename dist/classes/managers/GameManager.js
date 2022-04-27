@@ -4,6 +4,12 @@ import Word from '../words/Word.js';
 import RenderManager from './RenderManager.js';
 import UiManager from './UiManager.js';
 export default class GameManager {
+    static _instance;
+    static getInstance() {
+        return this._instance;
+    }
+    score;
+    words;
     constructor() {
         if (GameManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
@@ -12,18 +18,15 @@ export default class GameManager {
         this.words = new Array();
         this.words.push(new Word('abc', 60 * 1000));
         this.words.push(new Word('test', 60 * 1000));
-        this.words.push(new Word('dom', 60 * 1000));
+        this.words.push(new Word('testttt', 60 * 1000));
         this.words.push(new Word('a', 60 * 1000));
-        this.words.push(new Word('pies', 60 * 1000));
+        this.words.push(new Word('test2', 60 * 1000));
         this.words.push(new Word('test', 10 * 1000));
         this.words.push(new Word('test', 3 * 1000));
+        this.words.push(new Word('test3', 4 * 1000));
+        this.words.push(new Word('test4', 2 * 1000));
         this.words.push(new Word('test', 4 * 1000));
-        this.words.push(new Word('test', 2 * 1000));
         this.words.push(new Word('test', 4 * 1000));
-        this.words.push(new Word('test', 4 * 1000));
-    }
-    static getInstance() {
-        return this._instance;
     }
     wordSubmit(submitValue) {
         const words = this.words
@@ -52,8 +55,10 @@ export default class GameManager {
         ctx.save();
         ctx.fillStyle = '#0f0';
         ctx.font = `${Settings.drawFpsFontSize}px System, monospace`;
-        ctx.textBaseline = 'top';
-        ctx.fillText(Math.floor(SpaceTyperEngine.getInstance().getFps()).toString() + ' FPS', 5, 5);
+        ctx.textBaseline = 'bottom';
+        const gameDeltaTime = SpaceTyperEngine.getDeltaTime().toFixed(2);
+        const gameFPS = Math.floor(SpaceTyperEngine.getInstance().getFps()).toString();
+        ctx.fillText('GameRender: ' + gameFPS + ' FPS (' + gameDeltaTime + 'ms)', 5, window.innerHeight - 10 - Settings.drawFpsFontSize);
         ctx.restore();
         this.words.forEach((w) => w.draw(ctx));
     }

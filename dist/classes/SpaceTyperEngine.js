@@ -4,7 +4,24 @@ import ParticlesManager from './managers/ParticlesManager.js';
 import PromptManager from './managers/PromptManager.js';
 import RenderManager from './managers/RenderManager.js';
 import UiManager from './managers/UiManager.js';
+import Settings from './Settings.js';
 export default class SpaceTyperEngine {
+    renderManager;
+    uiManager;
+    gameManager;
+    particlesManager;
+    backgroundManager;
+    promptManager;
+    isRunning;
+    lastUpdateTimeStamp;
+    lastRequestedFrameId;
+    frameCount;
+    deltaTime;
+    timeElapsed;
+    static _instance;
+    static getInstance() {
+        return this._instance;
+    }
     constructor() {
         if (SpaceTyperEngine._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
@@ -27,20 +44,15 @@ export default class SpaceTyperEngine {
         if (document.visibilityState === 'hidden')
             this.pause();
     }
-    static getInstance() {
-        return this._instance;
-    }
     mainLoop(timeStamp) {
         const dt = timeStamp - this.lastUpdateTimeStamp;
         this.deltaTime = dt;
         this.timeElapsed += dt;
         this.gameManager.update();
         this.particlesManager.update();
-        this.backgroundManager.update();
         this.uiManager.update();
         this.gameManager.draw();
         this.particlesManager.draw();
-        this.backgroundManager.draw();
         this.uiManager.draw();
         this.lastUpdateTimeStamp = timeStamp;
         this.frameCount += 1;
@@ -51,7 +63,9 @@ export default class SpaceTyperEngine {
             return;
         window.cancelAnimationFrame(this.lastRequestedFrameId);
         this.isRunning = false;
-        this.renderManager.background.canvas.style.setProperty('--gray', '1');
+        this.backgroundManager.setGrayScale(1);
+        this.backgroundManager.setBlur(3);
+        this.backgroundManager.setEnabled(false);
         this.renderManager.particle.canvas.style.setProperty('--gray', '1');
         this.renderManager.game.canvas.classList.add('animateCanv');
         this.renderManager.game.canvas.style.setProperty('--gray', '1');
@@ -63,8 +77,9 @@ export default class SpaceTyperEngine {
         this.lastUpdateTimeStamp = performance.now();
         this.lastRequestedFrameId = window.requestAnimationFrame(this.mainLoop.bind(this));
         this.isRunning = true;
-        this.renderManager.background.canvas.style.setProperty('--gray', '0');
-        this.renderManager.particle.canvas.style.setProperty('--gray', '0');
+        this.backgroundManager.setGrayScale(0);
+        this.backgroundManager.setBlur(Settings.backgroundBlur);
+        this.backgroundManager.setEnabled(true);
         this.renderManager.game.canvas.classList.remove('animateCanv');
         this.renderManager.game.canvas.style.setProperty('--gray', '0');
         this.renderManager.game.canvas.style.setProperty('--blur', '0px');

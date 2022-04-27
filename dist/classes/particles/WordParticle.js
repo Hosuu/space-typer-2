@@ -2,6 +2,7 @@
 import Settings from '../Settings.js';
 import BaseParticle from './BaseParticle.js';
 export default class WordParticle extends BaseParticle {
+    text;
     constructor(opt) {
         super(opt);
         this.text = opt.text;

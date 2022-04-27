@@ -1,6 +1,13 @@
 ﻿import Settings from '../Settings.js';
 import GameManager from './GameManager.js';
 export default class PromptManager {
+    DOMelementHook;
+    promptValue;
+    lastText;
+    static _instance;
+    static getInstance() {
+        return this._instance;
+    }
     constructor() {
         if (PromptManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
@@ -13,9 +20,6 @@ export default class PromptManager {
         this.lastText = 'Start typing...';
         this.updateDOM();
         window.addEventListener('keydown', this.keyboardEventHandler.bind(this));
-    }
-    static getInstance() {
-        return this._instance;
     }
     keyboardEventHandler(event) {
         const char = event.key;

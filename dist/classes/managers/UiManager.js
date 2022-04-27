@@ -1,6 +1,14 @@
 ﻿import Counter from '../counter.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 export default class UiManager {
+    static _instance;
+    static getInstance() {
+        return this._instance;
+    }
+    topBarElement;
+    scoreElement;
+    scoreCounter;
+    timerElement;
     constructor() {
         UiManager._instance = this;
         const topBarHook = document.querySelector('.top_bar');
@@ -16,9 +24,6 @@ export default class UiManager {
         if (!(timerHook instanceof HTMLDivElement))
             throw new Error('Cannot find [stat="timer"] div element in DOM');
         this.timerElement = timerHook;
-    }
-    static getInstance() {
-        return this._instance;
     }
     updateTimer(miliSeconds) {
         const seconds = Math.floor(miliSeconds / 1000) % 60;

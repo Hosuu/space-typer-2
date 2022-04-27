@@ -4,10 +4,8 @@ import Settings from '../Settings.js';
 import Rect from '../shapes/Rect.js';
 import Vector2 from '../Vector2.js';
 export default class BaseWord {
-    constructor() {
-        this.progerss = 0;
-        this.dead = false;
-    }
+    progerss = 0;
+    dead = false;
     draw(ctx) {
         if (this.dead)
             return;

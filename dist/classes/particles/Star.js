@@ -2,6 +2,7 @@
 import Vector2 from '../Vector2.js';
 export default class Star {
     position;
+    positionOffest;
     velocity;
     size;
     hue;
@@ -18,6 +19,7 @@ export default class Star {
         const randX = Math.random() * width;
         const randY = Math.random() * height;
         this.position = options?.position ?? new Vector2(randX, randY);
+        this.positionOffest = new Vector2();
         this.size = options?.size ?? 1 + Math.random() * 4;
         const randVelocity = Vector2.RandomDirection.multiply((1 / this.size) * 0.005);
         this.velocity = options?.velocity ?? randVelocity;
@@ -33,7 +35,10 @@ export default class Star {
     }
     update(dt, parent) {
         this.position.add(this.velocity.clone().multiply(dt));
-        this.position.add(parent.getMouseMovement().multiply(1));
+        this.positionOffest.add(parent.getMouseMovement().multiply(0.05 * Math.sqrt(this.size)));
+        const positionDiff = this.position.clone();
+        this.position.lerpTowards(this.position.clone().add(this.positionOffest), 0.001 * dt);
+        this.positionOffest.add(positionDiff.subtract(this.position));
         this.shineTimer += dt;
         if (!this.isShining && this.shineTimer > this.shineInterval) {
             this.shineTimer -= this.shineInterval;
@@ -45,7 +50,7 @@ export default class Star {
         this.shineEasedScale = Easing.easeInCubic(this.shineScale);
         if (this.shineScale == 1)
             this.isShining = false;
-        const offset = 50;
+        const offset = 5;
         const { width: vWidth, height: vHeight } = parent.getScreenSize();
         if (this.position.x > vWidth + offset)
             this.position.x -= vWidth + offset;

@@ -35,9 +35,9 @@ export default class Star {
     }
     update(dt, parent) {
         this.position.add(this.velocity.clone().multiply(dt));
-        this.positionOffest.add(parent.getMouseMovement().multiply(0.05 * Math.sqrt(this.size)));
+        this.positionOffest.add(parent.getMouseMovement().multiply(parent.getParallaxScale() * Math.sqrt(this.size)));
         const positionDiff = this.position.clone();
-        this.position.lerpTowards(this.position.clone().add(this.positionOffest), 0.001 * dt);
+        this.position.lerpTowards(this.position.clone().add(this.positionOffest), 0.001 * dt * parent.getParallaxSpeed());
         this.positionOffest.add(positionDiff.subtract(this.position));
         this.shineTimer += dt;
         if (!this.isShining && this.shineTimer > this.shineInterval) {
@@ -46,7 +46,7 @@ export default class Star {
                 this.isShining = true;
             }
         }
-        this.shineScale = clamp01(this.shineScale + dt * (this.isShining ? 0.004 : -0.0005));
+        this.shineScale = clamp01(this.shineScale + dt * (this.isShining ? 0.002 : -0.0001));
         this.shineEasedScale = Easing.easeInCubic(this.shineScale);
         if (this.shineScale == 1)
             this.isShining = false;

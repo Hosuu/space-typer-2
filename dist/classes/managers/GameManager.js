@@ -10,24 +10,25 @@ export default class GameManager {
         return this._instance;
     }
     score;
+    scoreMultiplier;
+    combo;
     words;
     constructor() {
         if (GameManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
         GameManager._instance = this;
         this.score = 0;
+        this.scoreMultiplier = 1;
+        this.combo = 0;
         this.words = new Array();
         this.words.push(new Word('abc', 60 * 1000));
         this.words.push(new Word('test', 60 * 1000));
         this.words.push(new Word('testttt', 60 * 1000));
         this.words.push(new Word('a', 60 * 1000));
         this.words.push(new Word('test2', 60 * 1000));
-        this.words.push(new Word('test', 10 * 1000));
-        this.words.push(new Word('test', 3 * 1000));
-        this.words.push(new Word('test3', 4 * 1000));
-        this.words.push(new Word('test4', 2 * 1000));
-        this.words.push(new Word('test', 4 * 1000));
-        this.words.push(new Word('test', 4 * 1000));
+        setInterval(() => {
+            this.words.push(new Word('test', 75 * 1000));
+        }, 2000);
     }
     wordSubmit(submitValue) {
         const words = this.words
@@ -35,14 +36,20 @@ export default class GameManager {
             .filter((w) => !w.isDead())
             .reverse();
         let didHit = false;
-        let index = 0;
-        while (!didHit && index < words.length) {
-            didHit = words[index].submit(submitValue);
-            index++;
+        for (const word of words) {
+            if (word.submit(submitValue)) {
+                this.combo++;
+                didHit = true;
+                this.scoreMultiplier = this.combo ? 1 + Math.log10(this.combo) : 1;
+                BackgroundManager.getInstance().setShineChanceMultiplier(1 + Math.pow(this.combo, 1 / 1.15));
+                break;
+            }
         }
+        if (!didHit)
+            this.combo = 0;
     }
     addScore(amount) {
-        this.score += amount;
+        this.score += amount * this.scoreMultiplier;
         UiManager.getInstance().scoreCounter.setCount(this.score, 2500);
     }
     update() {
@@ -64,8 +71,12 @@ export default class GameManager {
             const bgLoopDelta = BackgroundManager.getInstance().getWorkerDeltaTime() ?? Infinity;
             const bgLoopFPS = (1000 / bgLoopDelta).toFixed(0);
             const bgLoopString = `bgWorkerLoop: ${bgLoopFPS} FPS (${bgLoopDelta.toFixed(2)}ms)`;
+            const comboString = `COMBO: ${this.combo}, score multiplier: x${this.scoreMultiplier.toFixed(2)}`;
+            const chanceStr = 0.0005 * (1 + Math.pow(this.combo, 1 / 1.15));
             ctx.fillText(mainLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize);
-            ctx.fillText(bgLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 2);
+            ctx.fillText(bgLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 2 - 1);
+            ctx.fillText(comboString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 3 - 2);
+            ctx.fillText('current shine chance every 100ms: ' + (chanceStr * 100).toFixed(2) + '%', 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 4 - 3);
             ctx.restore();
         }
         this.words.forEach((w) => w.draw(ctx));

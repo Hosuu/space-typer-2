@@ -20,6 +20,7 @@ export default class BackgroundWorkerManager {
     shiningChanceMultiplier;
     mousePosition;
     mouseMovement;
+    parallaxScale;
     parallaxSpeed;
     constructor(canvas) {
         this.canvas = canvas;
@@ -31,10 +32,11 @@ export default class BackgroundWorkerManager {
         this.stars = new Array();
         this.starsCount = 0;
         this.setStarsCount(Settings.backgroundStarsCount);
-        this.shiningChanceMultiplier = 100;
+        this.shiningChanceMultiplier = 1;
         this.mousePosition = new Vector2(canvas.width / 2, canvas.height / 2);
         this.mouseMovement = new Vector2(0, 0);
-        this.parallaxSpeed = 1;
+        this.parallaxScale = 0.05;
+        this.parallaxSpeed = 0.5;
         self.addEventListener('message', this.messageHandler.bind(this));
         this.lastRequestedFrameId = self.requestAnimationFrame(this.mainLoop.bind(this));
     }
@@ -117,6 +119,12 @@ export default class BackgroundWorkerManager {
     }
     getShiningChanceMultiplier() {
         return this.shiningChanceMultiplier;
+    }
+    getParallaxScale() {
+        return this.parallaxScale;
+    }
+    getParallaxSpeed() {
+        return this.parallaxSpeed;
     }
     getMousePos() {
         return this.mousePosition.clone();

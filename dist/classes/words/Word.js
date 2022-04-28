@@ -17,7 +17,7 @@ export default class Word extends BaseWord {
         this.speed = 1 / duration;
         this.size = Settings.wordFontSize;
         this.color = Settings.wordColor;
-        this.position = new Vector2(0, Math.random() * window.innerHeight);
+        this.position = new Vector2(0, Math.random() * (window.innerHeight - 200) + 100);
         this.updateText(text);
     }
     update(dt) {

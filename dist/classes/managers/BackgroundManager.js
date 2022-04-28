@@ -55,6 +55,9 @@ export default class BackgroundManager {
     clearCanvas() {
         this.worker.postMessage(['clearScreen']);
     }
+    setShineChanceMultiplier(multiplier) {
+        this.worker.postMessage(['setShiningChanceMultiplier', multiplier]);
+    }
     isEnabled() {
         return this.enabled;
     }

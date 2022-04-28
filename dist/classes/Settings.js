@@ -1,7 +1,8 @@
 ﻿export default class Settings {
+    static disableDefaultKeyFunctions = false;
     static backgroundEnabled = true;
-    static backgroundBlur = 0;
-    static backgroundOpacity = 1;
+    static backgroundBlur = 1.5;
+    static backgroundOpacity = 0.9;
     static backgroundStarsCount = 500;
     static starsParalax = true;
     static particlesEnabled = true;
@@ -17,6 +18,7 @@
     static wordtHighlighting = true;
     static wordHighlightningColor = '#5f7';
     static promptPreventKeyRepeating = false;
+    static protmpLogSubmitions = true;
     static renderWordCenterPoint = false;
     static wordCenterPointColor = '#f0f';
     static renderWordTextBox = false;

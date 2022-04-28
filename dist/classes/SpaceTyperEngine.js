@@ -79,7 +79,7 @@ export default class SpaceTyperEngine {
         this.isRunning = true;
         this.backgroundManager.setGrayScale(0);
         this.backgroundManager.setBlur(Settings.backgroundBlur);
-        this.backgroundManager.setEnabled(true);
+        this.backgroundManager.setEnabled(Settings.backgroundEnabled);
         this.renderManager.game.canvas.classList.remove('animateCanv');
         this.renderManager.game.canvas.style.setProperty('--gray', '0');
         this.renderManager.game.canvas.style.setProperty('--blur', '0px');
@@ -90,8 +90,8 @@ export default class SpaceTyperEngine {
     static getTimeElapsed() {
         return this.getInstance().timeElapsed;
     }
-    getFps() {
-        return 1000 / this.deltaTime;
+    getAvgFps() {
+        return 1000 / (this.timeElapsed / this.frameCount);
     }
 }
 //# sourceMappingURL=SpaceTyperEngine.js.map

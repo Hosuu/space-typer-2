@@ -1,6 +1,7 @@
 ﻿import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import Word from '../words/Word.js';
+import BackgroundManager from './BackgroundManager.js';
 import RenderManager from './RenderManager.js';
 import UiManager from './UiManager.js';
 export default class GameManager {
@@ -52,14 +53,21 @@ export default class GameManager {
     draw() {
         const ctx = RenderManager.getInstance().game.context;
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        ctx.save();
-        ctx.fillStyle = '#0f0';
-        ctx.font = `${Settings.drawFpsFontSize}px System, monospace`;
-        ctx.textBaseline = 'bottom';
-        const gameDeltaTime = SpaceTyperEngine.getDeltaTime().toFixed(2);
-        const gameFPS = Math.floor(SpaceTyperEngine.getInstance().getFps()).toString();
-        ctx.fillText('GameRender: ' + gameFPS + ' FPS (' + gameDeltaTime + 'ms)', 5, window.innerHeight - 10 - Settings.drawFpsFontSize);
-        ctx.restore();
+        if (Settings.drawFps) {
+            ctx.save();
+            ctx.fillStyle = '#0f0';
+            ctx.font = `${Settings.drawFpsFontSize}px System, monospace`;
+            ctx.textBaseline = 'bottom';
+            const mainLoopDelta = SpaceTyperEngine.getDeltaTime();
+            const mainLoopFps = (1000 / mainLoopDelta).toFixed(0);
+            const mainLoopString = `mainLoop: ${mainLoopFps} FPS (${mainLoopDelta.toFixed(2)}ms)`;
+            const bgLoopDelta = BackgroundManager.getInstance().getWorkerDeltaTime() ?? Infinity;
+            const bgLoopFPS = (1000 / bgLoopDelta).toFixed(0);
+            const bgLoopString = `bgWorkerLoop: ${bgLoopFPS} FPS (${bgLoopDelta.toFixed(2)}ms)`;
+            ctx.fillText(mainLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize);
+            ctx.fillText(bgLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 2);
+            ctx.restore();
+        }
         this.words.forEach((w) => w.draw(ctx));
     }
 }

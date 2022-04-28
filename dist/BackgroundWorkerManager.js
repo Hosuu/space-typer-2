@@ -6,28 +6,34 @@ self.addEventListener('message', (e) => {
     const [message, arg] = e.data;
     if (message !== 'init')
         return;
-    self.instance = new OffscreenBackgroundManager(arg);
+    self.instance = new BackgroundWorkerManager(arg);
 });
-class OffscreenBackgroundManager {
+export default class BackgroundWorkerManager {
     canvas;
     ctx;
+    deltaTime;
     isRunning;
     lastUpdateTimeStamp;
     lastRequestedFrameId;
     stars;
     starsCount;
+    shiningChanceMultiplier;
     mousePosition;
+    mouseMovement;
     parallaxSpeed;
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
+        this.deltaTime = 0;
         this.isRunning = true;
         this.lastUpdateTimeStamp = null;
         this.lastRequestedFrameId = 0;
         this.stars = new Array();
         this.starsCount = 0;
         this.setStarsCount(Settings.backgroundStarsCount);
+        this.shiningChanceMultiplier = 100;
         this.mousePosition = new Vector2(canvas.width / 2, canvas.height / 2);
+        this.mouseMovement = new Vector2(0, 0);
         this.parallaxSpeed = 1;
         self.addEventListener('message', this.messageHandler.bind(this));
         this.lastRequestedFrameId = self.requestAnimationFrame(this.mainLoop.bind(this));
@@ -36,8 +42,9 @@ class OffscreenBackgroundManager {
         const [message, data] = event.data;
         switch (message) {
             case 'updateMousePosition':
-                data.__proto__ = Vector2.prototype;
-                this.mousePosition = data;
+                const [position, movement] = data;
+                this.mousePosition.set(position.x, position.y);
+                this.mouseMovement.add(movement);
                 break;
             case 'resizeCanvas':
                 const oldSize = new Vector2(this.canvas.width, this.canvas.height);
@@ -48,10 +55,14 @@ class OffscreenBackgroundManager {
                     star.rescalePosition(oldSize, newSize);
                 break;
             case 'clearScreen':
+                console.log('cls');
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 break;
             case 'setStarsCount':
                 this.setStarsCount(data);
+                break;
+            case 'setShiningChanceMultiplier':
+                this.shiningChanceMultiplier = data;
                 break;
             case 'pauseLoop':
                 this.pauseLoop();
@@ -63,20 +74,14 @@ class OffscreenBackgroundManager {
     }
     mainLoop(timeStamp) {
         const deltaTime = timeStamp - (this.lastUpdateTimeStamp ?? timeStamp);
+        this.deltaTime = deltaTime;
+        self.postMessage(['deltaTime', this.deltaTime]);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (const star of this.stars) {
             star.update(deltaTime, this);
             star.draw(this.ctx, this);
         }
-        if (Settings.drawFps) {
-            this.ctx.save();
-            this.ctx.fillStyle = '#0f0';
-            this.ctx.font = `${Settings.drawFpsFontSize}px System, monospace`;
-            this.ctx.textBaseline = 'bottom';
-            const backgroundFps = Math.floor(1000 / deltaTime).toString();
-            this.ctx.fillText('BackgroundRender: ' + backgroundFps + ' FPS (' + deltaTime.toFixed(2) + 'ms)', 5, this.canvas.height - 10 - Settings.drawFpsFontSize * 2);
-            this.ctx.restore();
-        }
+        this.mouseMovement.set(0, 0);
         this.lastUpdateTimeStamp = timeStamp;
         this.lastRequestedFrameId = self.requestAnimationFrame(this.mainLoop.bind(this));
     }
@@ -94,20 +99,30 @@ class OffscreenBackgroundManager {
         this.isRunning = true;
     }
     setStarsCount(count) {
+        if (this.starsCount === count)
+            return;
         this.starsCount = count;
-        if (this.stars.length > this.starsCount)
+        if (this.stars.length > this.starsCount) {
             this.stars = this.stars.filter((_, index) => index < this.starsCount - 1);
-        while (this.stars.length < this.starsCount) {
-            this.stars.push(new Star(undefined, this));
         }
+        else
+            while (this.stars.length < this.starsCount) {
+                this.stars.push(new Star(undefined, this));
+            }
     }
     getScreenSize() {
         const width = this.canvas.width;
         const height = this.canvas.height;
         return { width, height };
     }
+    getShiningChanceMultiplier() {
+        return this.shiningChanceMultiplier;
+    }
     getMousePos() {
         return this.mousePosition.clone();
     }
+    getMouseMovement() {
+        return this.mouseMovement.clone();
+    }
 }
-//# sourceMappingURL=WebWorker.js.map
+//# sourceMappingURL=BackgroundWorkerManager.js.map

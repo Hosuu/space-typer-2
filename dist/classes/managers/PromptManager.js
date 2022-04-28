@@ -22,6 +22,8 @@ export default class PromptManager {
         window.addEventListener('keydown', this.keyboardEventHandler.bind(this));
     }
     keyboardEventHandler(event) {
+        if (Settings.disableDefaultKeyFunctions)
+            event.preventDefault();
         const char = event.key;
         const code = event.code;
         const timeStamp = event.timeStamp;
@@ -43,13 +45,16 @@ export default class PromptManager {
             return;
         }
         if (code === 'Enter' || code === 'Space') {
+            if (this.promptValue.length === 0)
+                return;
             const startTimeStamp = this.promptValue[0].timeStamp;
             const text = this.getText();
             const time = timeStamp - startTimeStamp;
             if (text.length == 0)
                 return;
             this.lastText = text;
-            console.log(text, time);
+            if (Settings.protmpLogSubmitions)
+                console.log(text, time);
             GameManager.getInstance().wordSubmit(text);
             this.reset();
             return;

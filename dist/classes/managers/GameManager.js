@@ -1,4 +1,6 @@
-﻿import Settings from '../Settings.js';
+﻿import { wordsDB } from '../../WordsDB.js';
+import Star from '../particles/Star.js';
+import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import Word from '../words/Word.js';
 import BackgroundManager from './BackgroundManager.js';
@@ -9,6 +11,7 @@ export default class GameManager {
     static getInstance() {
         return this._instance;
     }
+    spawnerTimer;
     score;
     scoreMultiplier;
     combo;
@@ -17,18 +20,11 @@ export default class GameManager {
         if (GameManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
         GameManager._instance = this;
+        this.spawnerTimer = 0;
         this.score = 0;
         this.scoreMultiplier = 1;
         this.combo = 0;
         this.words = new Array();
-        this.words.push(new Word('abc', 60 * 1000));
-        this.words.push(new Word('test', 60 * 1000));
-        this.words.push(new Word('testttt', 60 * 1000));
-        this.words.push(new Word('a', 60 * 1000));
-        this.words.push(new Word('test2', 60 * 1000));
-        setInterval(() => {
-            this.words.push(new Word('test', 75 * 1000));
-        }, 2000);
     }
     wordSubmit(submitValue) {
         const words = this.words
@@ -45,8 +41,10 @@ export default class GameManager {
                 break;
             }
         }
-        if (!didHit)
+        if (!didHit) {
             this.combo = 0;
+            this.scoreMultiplier = 1;
+        }
     }
     addScore(amount) {
         this.score += amount * this.scoreMultiplier;
@@ -54,6 +52,12 @@ export default class GameManager {
     }
     update() {
         const dt = SpaceTyperEngine.getDeltaTime();
+        this.spawnerTimer += dt;
+        const spawnDelay = 1500;
+        if (this.spawnerTimer > spawnDelay) {
+            this.spawnerTimer -= spawnDelay;
+            this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
+        }
         this.words.forEach((w) => w.update(dt));
         this.words = this.words.filter((w) => !w.isDead());
     }
@@ -72,11 +76,12 @@ export default class GameManager {
             const bgLoopFPS = (1000 / bgLoopDelta).toFixed(0);
             const bgLoopString = `bgWorkerLoop: ${bgLoopFPS} FPS (${bgLoopDelta.toFixed(2)}ms)`;
             const comboString = `COMBO: ${this.combo}, score multiplier: x${this.scoreMultiplier.toFixed(2)}`;
-            const chanceStr = 0.0005 * (1 + Math.pow(this.combo, 1 / 1.15));
+            const shineChance = Star.SHINE_BASE_CHANCE * (1 + Math.pow(this.combo, 1 / 1.15));
+            const shineStr = 'shine chance every 100ms: ' + (shineChance * 100).toFixed(2) + '%';
             ctx.fillText(mainLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize);
             ctx.fillText(bgLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 2 - 1);
             ctx.fillText(comboString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 3 - 2);
-            ctx.fillText('current shine chance every 100ms: ' + (chanceStr * 100).toFixed(2) + '%', 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 4 - 3);
+            ctx.fillText(shineStr, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 4 - 3);
             ctx.restore();
         }
         this.words.forEach((w) => w.draw(ctx));

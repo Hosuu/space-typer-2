@@ -4,7 +4,10 @@
     static backgroundBlur = 1.5;
     static backgroundOpacity = 0.9;
     static backgroundStarsCount = 500;
-    static starsParalax = true;
+    static starsShiningEnabled = true;
+    static starsParallaxEnabled = true;
+    static starsParallaxScale = 0.05;
+    static starsParallaxSpeed = 0.5;
     static particlesEnabled = true;
     static particlesBlur = 1;
     static particlesOpacity = 1;

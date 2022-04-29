@@ -28,7 +28,6 @@ export default class PromptManager {
         const code = event.code;
         const timeStamp = event.timeStamp;
         const isRepeating = event.repeat;
-        const isAltPressed = event.altKey;
         const isCtrlPressed = event.ctrlKey;
         if (isRepeating && Settings.promptPreventKeyRepeating)
             return;

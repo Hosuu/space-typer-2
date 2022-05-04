@@ -12,7 +12,7 @@
     static particlesBlur = 1;
     static particlesOpacity = 1;
     static particlesLimit = 500;
-    static wordPadding = 5;
+    static wordPadding = 3;
     static wordFont = 'Comfortaa';
     static wordFontSize = 24;
     static wordColor = '#fff';
@@ -20,15 +20,19 @@
     static wordTypingMatchColor = '#0ff';
     static wordtHighlighting = true;
     static wordHighlightningColor = '#5f7';
+    static goldenWordColor = '#ff0';
+    static goldenWordFontSize = 28;
+    static goldenWordSpeedMultilpier = 1.5;
     static promptPreventKeyRepeating = false;
     static protmpLogSubmitions = true;
     static renderWordCenterPoint = false;
     static wordCenterPointColor = '#f0f';
     static renderWordTextBox = false;
     static wordTextBoxColor = '#f00';
-    static renderWordColider = false;
+    static renderWordColider = true;
     static wordColiderColor = '#0ff';
     static drawFps = true;
     static drawFpsFontSize = 14;
+    static drawQuadTree = true;
 }
 //# sourceMappingURL=Settings.js.map

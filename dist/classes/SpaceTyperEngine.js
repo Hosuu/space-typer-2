@@ -5,6 +5,8 @@ import PromptManager from './managers/PromptManager.js';
 import RenderManager from './managers/RenderManager.js';
 import UiManager from './managers/UiManager.js';
 import Settings from './Settings.js';
+import Rect from './shapes/Rect.js';
+import Vector2 from './Vector2.js';
 export default class SpaceTyperEngine {
     renderManager;
     uiManager;
@@ -92,6 +94,14 @@ export default class SpaceTyperEngine {
     }
     getAvgFps() {
         return 1000 / (this.timeElapsed / this.frameCount);
+    }
+    static getGameArea() {
+        const topPadding = 64;
+        const bottomPadding = 80;
+        const position = new Vector2(0, 64);
+        const height = window.innerHeight - topPadding - bottomPadding;
+        const width = window.innerWidth;
+        return new Rect(position, width, height);
     }
 }
 //# sourceMappingURL=SpaceTyperEngine.js.map

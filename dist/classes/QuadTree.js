@@ -37,7 +37,7 @@ export default class QuadTree {
         this.nodes[QTnode.SouthEast] = new QuadTree(seBounds, this.max_objects, this.max_levels, this.level + 1);
         this.objects.forEach((obj) => {
             this.getNodes(obj._bounds).forEach((node) => {
-                node.insert(obj);
+                node.insert(obj, obj._bounds);
             });
         });
         this.objects = [];
@@ -61,7 +61,9 @@ export default class QuadTree {
             nodes.push(this.nodes[QTnode.SouthEast]);
         return nodes;
     }
-    insert(obj) {
+    insert(obj, bounds) {
+        if (bounds)
+            obj['_bounds'] = bounds;
         if (this.nodes) {
             this.getNodes(obj._bounds).forEach((node) => {
                 node.insert(obj);
@@ -81,6 +83,12 @@ export default class QuadTree {
                 for (const nestedQueryRessultObject of node.query(queryBounds))
                     queryRessultObjects.add(nestedQueryRessultObject);
         return Array.from(queryRessultObjects);
+    }
+    renderAt(ctx) {
+        this.bounds.renderAt(ctx, `hsl(${(360 / this.max_levels) * this.level},50%,50%)`);
+        if (this.nodes)
+            for (const node of this.nodes)
+                node.renderAt(ctx);
     }
 }
 //# sourceMappingURL=QuadTree.js.map

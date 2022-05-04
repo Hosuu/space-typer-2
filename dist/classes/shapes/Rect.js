@@ -26,6 +26,12 @@ export default class Rect {
     getCenterPoint() {
         return Vector2.lerp(this.position, new Vector2(this.getRightX(), this.getBottomY()), 0.5);
     }
+    isOverlaping(rect) {
+        return (this.getLeftX() < rect.getRightX() &&
+            this.getRightX() > rect.getLeftX() &&
+            this.getTopY() < rect.getBottomY() &&
+            this.getBottomY() > rect.getTopY());
+    }
     renderAt(ctx, color, width = 1) {
         ctx.save();
         ctx.strokeStyle = color;

@@ -1,7 +1,9 @@
 ﻿import { wordsDB } from '../../WordsDB.js';
 import Star from '../particles/Star.js';
+import QuadTree from '../QuadTree.js';
 import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
+import GoldenWord from '../words/GoldenWord.js';
 import Word from '../words/Word.js';
 import BackgroundManager from './BackgroundManager.js';
 import RenderManager from './RenderManager.js';
@@ -16,6 +18,7 @@ export default class GameManager {
     scoreMultiplier;
     combo;
     words;
+    quadTree;
     constructor() {
         if (GameManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
@@ -52,11 +55,17 @@ export default class GameManager {
     }
     update() {
         const dt = SpaceTyperEngine.getDeltaTime();
+        this.quadTree = new QuadTree(SpaceTyperEngine.getGameArea(), 5, 4);
+        for (const word of this.words)
+            this.quadTree.insert(word, word.getCollider());
         this.spawnerTimer += dt;
-        const spawnDelay = 1500;
+        const spawnDelay = 1000;
         if (this.spawnerTimer > spawnDelay) {
             this.spawnerTimer -= spawnDelay;
-            this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
+            if (Math.random() < 0.85)
+                this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
+            else
+                this.words.push(new GoldenWord(wordsDB[Math.floor(Math.random() * wordsDB.length)], 30 * 1000));
         }
         this.words.forEach((w) => w.update(dt));
         this.words = this.words.filter((w) => !w.isDead());
@@ -84,7 +93,12 @@ export default class GameManager {
             ctx.fillText(shineStr, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 4 - 3);
             ctx.restore();
         }
+        if (Settings.drawQuadTree)
+            this.quadTree.renderAt(ctx);
         this.words.forEach((w) => w.draw(ctx));
+    }
+    queryQuadTree(query) {
+        return this.quadTree.query(query);
     }
 }
 //# sourceMappingURL=GameManager.js.map

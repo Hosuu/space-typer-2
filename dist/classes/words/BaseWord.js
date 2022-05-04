@@ -55,5 +55,8 @@ export default class BaseWord {
     isDead() {
         return this.dead;
     }
+    getCollider() {
+        return this.collider;
+    }
 }
 //# sourceMappingURL=BaseWord.js.map

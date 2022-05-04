@@ -30,9 +30,9 @@ export default class Word extends BaseWord {
         let isTopColiding = false;
         for (const word of possibleCollisions) {
             if (this.collider.isOverlaping(word.getCollider())) {
-                if (word.getCollider().position.y > this.position.y)
+                if (word.getCollider().position.y >= this.position.y)
                     isBottomColiding = true;
-                else if (word.getCollider().position.y < this.position.y)
+                else if (word.getCollider().position.y <= this.position.y)
                     isTopColiding = true;
             }
         }
@@ -97,6 +97,7 @@ export default class Word extends BaseWord {
                 sizeDelta: 0.01,
                 sizeScaling: 1.02,
                 duration: 250,
+                color: this.color,
             });
         }
         new WordParticle({
@@ -105,6 +106,7 @@ export default class Word extends BaseWord {
             sizeDelta: -0.02,
             sizeScaling: 0.999,
             duration: 500,
+            color: this.color,
         });
     }
 }

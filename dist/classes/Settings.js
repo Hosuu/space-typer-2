@@ -20,7 +20,7 @@
     static wordTypingMatchColor = '#0ff';
     static wordtHighlighting = true;
     static wordHighlightningColor = '#5f7';
-    static goldenWordColor = '#ff0';
+    static goldenWordColor = '#e6b822';
     static goldenWordFontSize = 28;
     static goldenWordSpeedMultilpier = 1.5;
     static goldenWordChance = 0.01;

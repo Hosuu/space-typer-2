@@ -1,6 +1,7 @@
 ﻿import { wordsDB } from '../../WordsDB.js';
 import GameManager from '../managers/GameManager.js';
 import CircleParticle from '../particles/CircleParticle.js';
+import WordParticle from '../particles/WordParticle.js';
 import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import Vector2 from '../Vector2.js';
@@ -61,12 +62,20 @@ export default class GoldenWord extends BaseWord {
                 velocity,
                 velocityScaling: 1.0002,
                 size: 1 + Math.random() * 2,
-                sizeDelta: 0.02,
-                sizeScaling: 1.03,
-                duration: 400,
-                color: '#ff0',
+                sizeDelta: 0.01,
+                sizeScaling: 1.02,
+                duration: 1250,
+                color: this.color,
             });
         }
+        new WordParticle({
+            position,
+            text: this.text,
+            sizeDelta: -0.02,
+            sizeScaling: 0.999,
+            duration: 1500,
+            color: this.color,
+        });
     }
 }
 //# sourceMappingURL=GoldenWord.js.map

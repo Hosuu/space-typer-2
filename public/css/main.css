@@ -63,7 +63,7 @@ canvas {
 .top_bar {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	transition: all 1.2s ease-out;
+	transition: all 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .top_bar[visible='true'] {

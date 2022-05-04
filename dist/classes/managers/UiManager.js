@@ -1,5 +1,5 @@
 ﻿import Counter from '../counter.js';
-import SpaceTyperEngine from '../SpaceTyperEngine.js';
+import GameManager from './GameManager.js';
 export default class UiManager {
     static _instance;
     static getInstance() {
@@ -47,7 +47,13 @@ export default class UiManager {
     }
     draw() {
         this.scoreCounter.draw(this.scoreElement, 0);
-        this.updateTimer(Math.floor(SpaceTyperEngine.getTimeElapsed()));
+        this.updateTimer(Math.floor(Date.now() - GameManager.getInstance().getStartTimeStamp()));
+    }
+    show() {
+        this.topBarElement.setAttribute('visible', 'true');
+    }
+    hide() {
+        this.topBarElement.setAttribute('visible', 'false');
     }
 }
 //# sourceMappingURL=UiManager.js.map

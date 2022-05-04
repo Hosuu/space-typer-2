@@ -6,6 +6,7 @@ import SpaceTyperEngine from '../SpaceTyperEngine.js';
 import GoldenWord from '../words/GoldenWord.js';
 import Word from '../words/Word.js';
 import BackgroundManager from './BackgroundManager.js';
+import PromptManager from './PromptManager.js';
 import RenderManager from './RenderManager.js';
 import UiManager from './UiManager.js';
 export default class GameManager {
@@ -14,6 +15,8 @@ export default class GameManager {
         return this._instance;
     }
     spawnerTimer;
+    isStarted;
+    startTimeStamp;
     score;
     lives;
     scoreMultiplier;
@@ -24,6 +27,8 @@ export default class GameManager {
         if (GameManager._instance)
             throw Error('Singletone ERROR: Cannot initalize more than one instance of this class');
         GameManager._instance = this;
+        this.isStarted = false;
+        this.startTimeStamp = 0;
         this.spawnerTimer = 0;
         this.score = 0;
         this.lives = 3;
@@ -32,6 +37,12 @@ export default class GameManager {
         this.words = new Array();
     }
     wordSubmit(submitValue) {
+        if (!this.isStarted) {
+            if (submitValue === 'start')
+                return this.newGame();
+        }
+        else if (submitValue === 'letmeout')
+            return this.endGame();
         const words = this.words
             .sort((a, b) => a.getProgess() - b.getProgess())
             .filter((w) => !w.isDead())
@@ -60,8 +71,9 @@ export default class GameManager {
         this.quadTree = new QuadTree(SpaceTyperEngine.getGameArea(), 5, 4);
         for (const word of this.words)
             this.quadTree.insert(word, word.getCollider());
-        this.spawnerTimer += dt;
-        const spawnDelay = 1000;
+        if (this.isStarted)
+            this.spawnerTimer += dt;
+        const spawnDelay = 500;
         if (this.spawnerTimer > spawnDelay) {
             this.spawnerTimer -= spawnDelay;
             this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
@@ -104,6 +116,32 @@ export default class GameManager {
     subtractLife() {
         this.lives--;
         UiManager.getInstance().setLives(this.lives);
+        if (this.lives === 0) {
+            this.endGame();
+            PromptManager.getInstance().setPlaceholder(`GAMEOVER! score: ${Math.round(this.score)}`);
+            alert(`GAMEOVER! score: ${Math.round(this.score)}`);
+        }
+    }
+    registerWord(word) {
+        this.words.push(word);
+    }
+    getStartTimeStamp() {
+        return this.startTimeStamp;
+    }
+    newGame() {
+        this.score = 0;
+        this.lives = 3;
+        this.words = new Array();
+        this.isStarted = true;
+        this.spawnerTimer = 0;
+        this.startTimeStamp = Date.now();
+        UiManager.getInstance().show();
+    }
+    endGame() {
+        UiManager.getInstance().hide();
+        this.isStarted = false;
+        this.spawnerTimer = 0;
+        this.words = new Array();
     }
 }
 //# sourceMappingURL=GameManager.js.map

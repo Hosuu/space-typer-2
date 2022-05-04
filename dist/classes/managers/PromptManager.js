@@ -17,7 +17,7 @@ export default class PromptManager {
             throw Error('DOM element [stat="prompt"] not found!');
         this.DOMelementHook = DOMhook;
         this.promptValue = new Array();
-        this.lastText = 'Start typing...';
+        this.lastText = "Type 'start' to start the game";
         this.updateDOM();
         window.addEventListener('keydown', this.keyboardEventHandler.bind(this));
     }
@@ -88,6 +88,11 @@ export default class PromptManager {
             this.DOMelementHook.innerHTML = this.lastText;
             this.DOMelementHook.classList.add('inactive');
         }
+    }
+    setPlaceholder(text) {
+        this.promptValue = new Array();
+        this.lastText = text;
+        this.updateDOM();
     }
 }
 //# sourceMappingURL=PromptManager.js.map

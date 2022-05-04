@@ -25,7 +25,8 @@ export default class BaseParticle {
         this.sizeScaling = opt.sizeScaling ?? 1;
         this.duration = opt.duration ?? 1000;
         this.lifeTime = 0;
-        this.color = opt.color ?? '#fff';
+        this.color = opt.color ?? '#fafafa';
+        console.log(this.color);
     }
     update(dt) {
         if (this.dead)

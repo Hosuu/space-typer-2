@@ -1440,8 +1440,6 @@
     'jail',
     'Japanese',
     'jet',
-    'Jew',
-    'Jewish',
     'job',
     'join',
     'joint',

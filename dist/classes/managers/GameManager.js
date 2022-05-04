@@ -15,6 +15,7 @@ export default class GameManager {
     }
     spawnerTimer;
     score;
+    lives;
     scoreMultiplier;
     combo;
     words;
@@ -25,6 +26,7 @@ export default class GameManager {
         GameManager._instance = this;
         this.spawnerTimer = 0;
         this.score = 0;
+        this.lives = 3;
         this.scoreMultiplier = 1;
         this.combo = 0;
         this.words = new Array();
@@ -62,9 +64,8 @@ export default class GameManager {
         const spawnDelay = 1000;
         if (this.spawnerTimer > spawnDelay) {
             this.spawnerTimer -= spawnDelay;
-            if (Math.random() < 0.85)
-                this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
-            else
+            this.words.push(new Word(wordsDB[Math.floor(Math.random() * wordsDB.length)], 60 * 1000));
+            if (Math.random() < Settings.goldenWordChance)
                 this.words.push(new GoldenWord(wordsDB[Math.floor(Math.random() * wordsDB.length)], 30 * 1000));
         }
         this.words.forEach((w) => w.update(dt));
@@ -99,6 +100,10 @@ export default class GameManager {
     }
     queryQuadTree(query) {
         return this.quadTree.query(query);
+    }
+    subtractLife() {
+        this.lives--;
+        UiManager.getInstance().setLives(this.lives);
     }
 }
 //# sourceMappingURL=GameManager.js.map

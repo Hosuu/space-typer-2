@@ -20,7 +20,7 @@ export default class Word extends BaseWord {
         this.size = Settings.wordFontSize;
         this.color = Settings.wordColor;
         const gameArea = SpaceTyperEngine.getGameArea();
-        this.position = new Vector2(0, Math.random() * gameArea.height + gameArea.getTopY());
+        this.position = new Vector2(0, Math.random() * (gameArea.height - this.size) + gameArea.getTopY());
         this.updateText(text);
     }
     update(dt) {
@@ -54,6 +54,7 @@ export default class Word extends BaseWord {
         }
         if (this.progerss > 1) {
             this.playPassAnimation();
+            GameManager.getInstance().subtractLife();
             this.dead = true;
         }
         this.position.x = this.progerss * innerWidth - (1 - this.progerss) * this.textBox.width;

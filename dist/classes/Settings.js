@@ -23,16 +23,17 @@
     static goldenWordColor = '#ff0';
     static goldenWordFontSize = 28;
     static goldenWordSpeedMultilpier = 1.5;
+    static goldenWordChance = 0.01;
     static promptPreventKeyRepeating = false;
     static protmpLogSubmitions = true;
     static renderWordCenterPoint = false;
     static wordCenterPointColor = '#f0f';
     static renderWordTextBox = false;
     static wordTextBoxColor = '#f00';
-    static renderWordColider = true;
+    static renderWordColider = false;
     static wordColiderColor = '#0ff';
-    static drawFps = true;
+    static drawFps = false;
     static drawFpsFontSize = 14;
-    static drawQuadTree = true;
+    static drawQuadTree = false;
 }
 //# sourceMappingURL=Settings.js.map

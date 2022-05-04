@@ -14,6 +14,7 @@ export default class GoldenWord extends BaseWord {
     size;
     color;
     lifeTime;
+    scoreMultiplier;
     constructor(text, duration) {
         super();
         this.speed = 1 / duration;
@@ -24,6 +25,7 @@ export default class GoldenWord extends BaseWord {
         this.position = new Vector2(0, centerY);
         this.updateText(text);
         this.lifeTime = Math.PI * Math.random() * 20000;
+        this.scoreMultiplier = 1;
     }
     update(dt) {
         this.progerss += dt * this.speed;
@@ -34,9 +36,7 @@ export default class GoldenWord extends BaseWord {
         const gameArea = SpaceTyperEngine.getGameArea();
         const centerY = (gameArea.getTopY() + gameArea.getBottomY()) / 2;
         this.position.y =
-            Math.cos(this.lifeTime / 1000) * 0.4 * gameArea.height +
-                centerY +
-                this.collider.height / 2;
+            centerY + Math.sin(this.lifeTime / 3000) * 0.3 * (gameArea.height - this.size);
         this.collider.position = this.position
             .clone()
             .subtract(new Vector2(Settings.wordPadding, Settings.wordPadding));
@@ -45,10 +45,11 @@ export default class GoldenWord extends BaseWord {
         if (this.text != sumbitValue)
             return false;
         const gameMan = GameManager.getInstance();
-        gameMan.addScore(this.text.length * 10);
+        gameMan.addScore(this.text.length * this.scoreMultiplier);
         this.playSubmitAnimation();
         this.updateText(wordsDB[Math.floor(Math.random() * wordsDB.length)]);
         this.speed *= Settings.goldenWordSpeedMultilpier;
+        this.scoreMultiplier++;
         return true;
     }
     playSubmitAnimation() {

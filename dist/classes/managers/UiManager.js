@@ -8,6 +8,7 @@ export default class UiManager {
     topBarElement;
     scoreElement;
     scoreCounter;
+    livesElement;
     timerElement;
     constructor() {
         UiManager._instance = this;
@@ -20,6 +21,10 @@ export default class UiManager {
             throw new Error('Cannot find [stat="score"] div element in DOM');
         this.scoreElement = scoreHook;
         this.scoreCounter = new Counter(0);
+        const livesHook = document.querySelector('[stat="lives"]');
+        if (!(livesHook instanceof HTMLDivElement))
+            throw new Error('Cannot find [stat="timer"] div element in DOM');
+        this.livesElement = livesHook;
         const timerHook = document.querySelector('[stat="timer"]');
         if (!(timerHook instanceof HTMLDivElement))
             throw new Error('Cannot find [stat="timer"] div element in DOM');
@@ -33,6 +38,9 @@ export default class UiManager {
             .padStart(2, '0')}`;
         if (this.timerElement.innerHTML != textValue)
             this.timerElement.innerHTML = textValue;
+    }
+    setLives(amount) {
+        this.livesElement.innerHTML = amount.toString();
     }
     update() {
         this.scoreCounter.update();

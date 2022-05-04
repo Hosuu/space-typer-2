@@ -28,7 +28,7 @@ export default class Star {
         this.position = options?.position ?? new Vector2(randX, randY);
         this.positionOffest = new Vector2();
         this.size = randomRanged(Star.MIN_SIZE, Star.MAX_SIZE);
-        const randVelocity = Vector2.RandomDirection.multiply((1 / this.size) * 0.005);
+        const randVelocity = Vector2.RandomDirection.multiply((1 / this.size) * 0.0075);
         this.velocity = options?.velocity ?? randVelocity;
         this.hue = options?.hue ?? Math.random() * 360;
         this.stauration = options?.stauration ?? 6 + Math.random() * 6;

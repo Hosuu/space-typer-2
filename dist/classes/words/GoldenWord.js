@@ -60,19 +60,14 @@ export default class GoldenWord extends BaseWord {
             new CircleParticle({
                 position,
                 velocity,
-                velocityScaling: 1.0002,
-                size: 1 + Math.random() * 2,
-                sizeDelta: 0.01,
-                sizeScaling: 1.02,
-                duration: 1250,
+                size: 1 + Math.random() * 3,
+                duration: 750,
                 color: this.color,
             });
         }
         new WordParticle({
             position,
             text: this.text,
-            sizeDelta: -0.02,
-            sizeScaling: 0.999,
             duration: 1500,
             color: this.color,
         });

@@ -78,9 +78,7 @@ export default class Word extends BaseWord {
             new CircleParticle({
                 position: centerLeft,
                 velocity,
-                velocityScaling: 0.987,
                 size: 3,
-                sizeScaling: 1.02,
                 duration: 150,
             });
         }
@@ -92,10 +90,7 @@ export default class Word extends BaseWord {
             new CircleParticle({
                 position,
                 velocity,
-                velocityScaling: 1.0002,
                 size: 1 + Math.random() * 2,
-                sizeDelta: 0.01,
-                sizeScaling: 1.02,
                 duration: 250,
                 color: this.color,
             });
@@ -103,8 +98,6 @@ export default class Word extends BaseWord {
         new WordParticle({
             position,
             text: this.text,
-            sizeDelta: -0.02,
-            sizeScaling: 0.999,
             duration: 500,
             color: this.color,
         });

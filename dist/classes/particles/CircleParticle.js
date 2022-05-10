@@ -8,7 +8,7 @@ export default class CircleParticle extends BaseParticle {
             return;
         ctx.save();
         ctx.fillStyle = this.color;
-        ctx.globalAlpha = 1 - this.lifeTime / this.duration;
+        ctx.globalAlpha = 1 - this.lifeFraction;
         ctx.beginPath();
         ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2);
         ctx.fill();

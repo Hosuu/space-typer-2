@@ -18,14 +18,6 @@
         window.addEventListener('resize', this.resizeEventHandler.bind(this));
         window.dispatchEvent(new Event('resize'));
     }
-    resizeEventHandler() {
-        const height = window.innerHeight;
-        const width = window.innerWidth;
-        this.particleCanvas.width = width;
-        this.particleCanvas.height = height;
-        this.gameCanvas.width = width;
-        this.gameCanvas.height = height;
-    }
     get particle() {
         const canvas = this.particleCanvas;
         const context = canvas.getContext('2d');

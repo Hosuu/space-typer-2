@@ -10,11 +10,12 @@ export default class WordParticle extends BaseParticle {
     }
     draw(ctx) {
         ctx.save();
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color;
+        ctx.globalAlpha = 1 - Easing.easeOutCirc(this.lifeFraction);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = `${Settings.wordFontSize * this.size}px ${Settings.wordFont}, Comfortaa, sans-serif`;
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = 1 - Easing.easeOutCirc(this.lifeTime / this.duration);
+        ctx.font = `${(1 - Easing.easeInCubic(this.lifeFraction)) * Settings.wordFontSize * this.size}px ${Settings.wordFont}, Comfortaa, sans-serif`;
         ctx.fillText(this.text, this.position.x, this.position.y);
         ctx.restore();
     }

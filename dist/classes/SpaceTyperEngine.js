@@ -2,13 +2,11 @@
 import GameManager from './managers/GameManager.js';
 import ParticlesManager from './managers/ParticlesManager.js';
 import PromptManager from './managers/PromptManager.js';
-import RenderManager from './managers/RenderManager.js';
 import UiManager from './managers/UiManager.js';
 import Settings from './Settings.js';
 import Rect from './shapes/Rect.js';
 import Vector2 from './Vector2.js';
 export default class SpaceTyperEngine {
-    renderManager;
     uiManager;
     gameManager;
     particlesManager;
@@ -34,7 +32,6 @@ export default class SpaceTyperEngine {
         this.frameCount = 0;
         this.deltaTime = 0;
         this.timeElapsed = 0;
-        this.renderManager = new RenderManager();
         this.uiManager = new UiManager();
         this.gameManager = new GameManager();
         this.particlesManager = new ParticlesManager();
@@ -42,6 +39,8 @@ export default class SpaceTyperEngine {
         this.promptManager = new PromptManager();
         window.addEventListener('focus', this.resume.bind(this));
         window.addEventListener('blur', this.pause.bind(this));
+        window.addEventListener('resize', this.resizeEventHandler.bind(this));
+        window.dispatchEvent(new Event('resize'));
         this.lastRequestedFrameId = window.requestAnimationFrame(this.mainLoop.bind(this));
         if (document.visibilityState === 'hidden')
             this.pause();
@@ -50,8 +49,8 @@ export default class SpaceTyperEngine {
         const dt = timeStamp - this.lastUpdateTimeStamp;
         this.deltaTime = dt;
         this.timeElapsed += dt;
-        this.gameManager.update();
-        this.particlesManager.update();
+        this.gameManager.update(dt);
+        this.particlesManager.update(dt);
         this.uiManager.update();
         this.gameManager.draw();
         this.particlesManager.draw();
@@ -68,10 +67,10 @@ export default class SpaceTyperEngine {
         this.backgroundManager.setGrayScale(1);
         this.backgroundManager.setBlur(3);
         this.backgroundManager.setEnabled(false);
-        this.renderManager.particle.canvas.style.setProperty('--gray', '1');
-        this.renderManager.game.canvas.classList.add('animateCanv');
-        this.renderManager.game.canvas.style.setProperty('--gray', '1');
-        this.renderManager.game.canvas.style.setProperty('--blur', '6px');
+        this.particlesManager.getCanvas().style.setProperty('--gray', '1');
+        this.gameManager.getCanvas().classList.add('animateCanv');
+        this.gameManager.getCanvas().style.setProperty('--gray', '1');
+        this.gameManager.getCanvas().style.setProperty('--blur', '6px');
     }
     resume() {
         if (this.isRunning)
@@ -82,9 +81,18 @@ export default class SpaceTyperEngine {
         this.backgroundManager.setGrayScale(0);
         this.backgroundManager.setBlur(Settings.backgroundBlur);
         this.backgroundManager.setEnabled(Settings.backgroundEnabled);
-        this.renderManager.game.canvas.classList.remove('animateCanv');
-        this.renderManager.game.canvas.style.setProperty('--gray', '0');
-        this.renderManager.game.canvas.style.setProperty('--blur', '0px');
+        this.particlesManager.getCanvas().style.setProperty('--gray', '0');
+        this.gameManager.getCanvas().classList.remove('animateCanv');
+        this.gameManager.getCanvas().style.setProperty('--gray', '0');
+        this.gameManager.getCanvas().style.setProperty('--blur', '0px');
+    }
+    resizeEventHandler() {
+        const height = window.innerHeight;
+        const width = window.innerWidth;
+        this.particlesManager.getCanvas().width = width;
+        this.particlesManager.getCanvas().height = height;
+        this.gameManager.getCanvas().width = width;
+        this.gameManager.getCanvas().height = height;
     }
     static getDeltaTime() {
         return this.getInstance().deltaTime;

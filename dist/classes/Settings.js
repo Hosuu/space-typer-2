@@ -12,6 +12,7 @@
     static particlesBlur = 1;
     static particlesOpacity = 1;
     static particlesLimit = 500;
+    static wordSpawnerDelay = 1500;
     static wordPadding = 3;
     static wordFont = 'Comfortaa';
     static wordFontSize = 24;

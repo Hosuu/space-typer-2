@@ -1,5 +1,5 @@
-﻿import PromptManager from '../managers/PromptManager.js';
-import RenderManager from '../managers/RenderManager.js';
+﻿import GameManager from '../managers/GameManager.js';
+import PromptManager from '../managers/PromptManager.js';
 import Settings from '../Settings.js';
 import Rect from '../shapes/Rect.js';
 import Vector2 from '../Vector2.js';
@@ -34,7 +34,7 @@ export default class BaseWord {
         ctx.restore();
     }
     updateText(newText) {
-        const ctx = RenderManager.getInstance().game.context;
+        const ctx = GameManager.getInstance().getCanvas().getContext('2d');
         ctx.save();
         ctx.font = `${this.size}px ${Settings.wordFont}, Comfortaa, sans-serif`;
         ctx.textBaseline = 'top';

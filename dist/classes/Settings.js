@@ -28,13 +28,13 @@
     static promptPreventKeyRepeating = false;
     static protmpLogSubmitions = true;
     static renderWordCenterPoint = false;
-    static wordCenterPointColor = '#f0f';
+    static wordCenterPointColor = '#f00a';
     static renderWordTextBox = false;
     static wordTextBoxColor = '#f00';
     static renderWordColider = false;
     static wordColiderColor = '#0ff';
     static drawFps = false;
-    static drawFpsFontSize = 14;
+    static drawFpsFontSize = 13;
     static drawQuadTree = false;
 }
 //# sourceMappingURL=Settings.js.map

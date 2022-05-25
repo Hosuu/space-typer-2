@@ -74,11 +74,11 @@ export default class Word extends BaseWord {
     playPassAnimation() {
         const centerLeft = this.textBox.getCenterPoint().add(Vector2.Left.multiply(this.textBox.width / 2));
         for (let i = 0; i < 7; i++) {
-            const velocity = Vector2.FromAngle(Math.PI + (Math.random() - 0.5) * (Math.PI / 4)).multiply(3);
+            const velocity = Vector2.FromAngle(Math.PI + (Math.random() - 0.5) * (Math.PI / 4)).multiply(1.2);
             new CircleParticle({
                 position: centerLeft,
                 velocity,
-                size: 3,
+                size: 2 + Math.random() * 2,
                 duration: 150,
             });
         }

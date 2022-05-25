@@ -1,5 +1,4 @@
 ﻿import { wordsDB } from '../../WordsDB.js';
-import Star from '../particles/Star.js';
 import QuadTree from '../QuadTree.js';
 import Settings from '../Settings.js';
 import SpaceTyperEngine from '../SpaceTyperEngine.js';
@@ -68,13 +67,8 @@ export default class GameManager {
             const bgLoopDelta = BackgroundManager.getInstance().getWorkerDeltaTime() ?? Infinity;
             const bgLoopFPS = (1000 / bgLoopDelta).toFixed(0);
             const bgLoopString = `bgWorkerLoop: ${bgLoopFPS} FPS (${bgLoopDelta.toFixed(2)}ms)`;
-            const comboString = `COMBO: ${this.combo}, score multiplier: x${this.scoreMultiplier.toFixed(2)}`;
-            const shineChance = Star.SHINE_BASE_CHANCE * (1 + Math.pow(this.combo, 1 / 1.15));
-            const shineStr = 'shine chance every 100ms: ' + (shineChance * 100).toFixed(2) + '%';
             ctx.fillText(mainLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize);
             ctx.fillText(bgLoopString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 2 - 1);
-            ctx.fillText(comboString, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 3 - 2);
-            ctx.fillText(shineStr, 5, window.innerHeight - 5 - Settings.drawFpsFontSize * 4 - 3);
             ctx.restore();
         }
         if (Settings.drawQuadTree)
@@ -137,8 +131,27 @@ export default class GameManager {
         UiManager.getInstance().setLives(this.lives);
         if (this.lives === 0) {
             this.endGame();
-            PromptManager.getInstance().setPlaceholder(`GAMEOVER! score: ${Math.round(this.score)}`);
-            alert(`GAMEOVER! score: ${Math.round(this.score)}`);
+            PromptManager.getInstance().setPlaceholder(`Type 'start' to start the game!`);
+            const container = document.createElement('div');
+            container.classList.add('dialog_container');
+            const label = document.createElement('div');
+            label.append(document.createTextNode(`GAMEOVER!`));
+            label.append(document.createElement('br'));
+            label.append(document.createTextNode(`score: ${Math.round(this.score)}`));
+            label.style.textAlign = 'center';
+            container.append(label);
+            const close_btn = document.createElement('button');
+            close_btn.innerHTML = 'Close';
+            container.append(close_btn);
+            new Promise((res, _) => {
+                document.body.append(container);
+                close_btn.addEventListener('click', res);
+            }).finally(() => {
+                container.addEventListener('animationend', () => {
+                    container.remove();
+                });
+                container.style.animationName = 'dialog_hide';
+            });
         }
     }
     queryQuadTree(query) {
